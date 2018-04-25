@@ -4,14 +4,14 @@ Play against your favorite draughts engine like MobyDam. <br/>
 Move pieces on the board by point and click. <br/>
 If the draughts engine uses the Websocket protocol this browser client and the engine can directly be connected. <br/>
 
-![bridge](bridge.png)
+![bridge](include/images/bridge.png)
 
 Often draughts engines use the Tcp Socket protocol. <br/>
 But browser clients do not understand this protocol. <br/>
 To solve this problem an intermediate server has to put between client and engine.  <br/>
 This server acts as a bridge for the messages between the client and the engine. <br/>
 
-![connect](connect.png)
+![connect](include/images/connect.png)
 
 One great advantage of using a browser client is that you are independent of the operating system (Linux, Windows, Mac). <br/>
 The price you have to pay is the use of a bridge server. <br/>
