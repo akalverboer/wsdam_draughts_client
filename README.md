@@ -13,7 +13,8 @@ This server acts as a bridge for the messages between the client and the engine.
 
 ![bridge](include/images/bridge.png)
 
-One great advantage of using a browser client is that you are independent of the operating system (Linux, Windows, Mac). <br/>
+One great advantage of using a browser client is that you are independent of the operating system like
+Linux, Windows and Mac. <br/>
 The price you have to pay is the use of a bridge server. <br/>
 Until draughts engines are designed to communicate directly with a browser client. <br/>
 But it does not cost you anything, because the bridge server application is free to download. <br/>
