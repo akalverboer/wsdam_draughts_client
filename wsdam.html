@@ -1,0 +1,589 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head  profile="http://www.w3.org/2005/10/profile" >
+  <title> WsDam </title>
+  <meta charset="utf-8">
+  <!--  Copyright 2018 Arthur Kalverboer  -->
+  <meta name="robots" content="index, follow" />    
+  <meta name="lang" content="english" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="description" content="Webclient for 10x10 Draughts" />
+  <meta name="keywords" content="bridge server, websockets, tcp,ip, sockets, protocol" />
+  <meta name="date" content="2018-03-08 19:40" />
+
+  <meta property="og:title" content="WsDam" />
+  <meta property="og:site_name" content="Webclient for 10x10 Draughts." />
+  <meta property="og:image" content="include/images/wsdam_logo.jpg" />
+  <link rel="image_src" href="include/images/wsdam_logo.jpg" />
+
+  <link rel="icon" type="image/png" href="include/images/favicon.png" />
+  <link href="include/css/wsdam_base.css" rel="stylesheet" type="text/css" />
+  <link href="include/css/wsdam_page.css" rel="stylesheet" type="text/css" />
+  <link href="include/css/wsdam_print.css" rel="stylesheet" type="text/css" media="print" />
+
+  <script type="text/javascript" src="include/js/wsdam_main.js"> </script>
+  <script type="text/javascript" src="include/js/wsdam_moves.js"> </script>
+  <script type="text/javascript" src="include/js/wsdam_position.js"> </script>
+  <script type="text/javascript" src="include/js/wsdam_config.js"> </script>
+  <script type="text/javascript" src="include/js/wsdam_connect.js"> </script>
+  <script type="text/javascript" src="include/js/wsdam_page.js"> </script>
+</head>
+
+<body> 
+<!-- =========================================================================== -->
+<div id="div_page">
+
+<!-- ========== RIGHT ========== -->
+<div id="div_right">
+  <div id="div_right_content">
+    <div id="div_content1">
+       <!-- ========== CONTENT RIGHT ========== -->
+       <canvas id="myCanvas" width="200" height="200" title="canvas" >
+          <p>Unfortunately, your browser is currently unsupported by our web application </p>
+       </canvas>  
+       <br/> 
+    </div>  <!-- div_content1 -->
+  </div>
+</div>
+
+<!-- ========== LEFT ========== -->
+<div id="div_left">
+  <div id="div_left_content">
+    <div id="div_left_header">
+      <div id="div_content2">
+
+<p>
+   <span id="span_page_title"  style="line-height: 50px; text-align: middle; "   > 
+      <noscript> SORRY, YOU NEED JAVASCRIPT. </noscript>
+      Webclient for 10x10 Draughts
+   </span>
+
+   <a style="float:right; margin: 7px; text-decoration: none; border: 0px solid black;"  
+      href="../diagrammakermenu/diagram_maker_menu.html"  title="Home" >
+      <img border="0" alt="home" height="36" 
+          src="include/images/button_home.png"
+      />
+   </a> 
+</p>
+
+       </div>  <!-- div_content2 -->
+    </div>  <!-- div__left_header -->
+
+    <!--  LEFT_RIGHT  -->
+    <div id="div_left_right">
+      <div id="div_left_right_content">
+        <div id="div_content3" >
+           <!-- ========== CONTENT LEFT-RIGHT ========== -->
+
+<!-- === SECTIONS WITH SWITCHABLE CONTENT === -->
+<div id="div_left_right_content_0">
+  <!--  === content section 0 ===  -->
+  <br/>
+  <p> <strong> INTRO </strong> </p>
+  <br/>
+  <p>
+Play against your favorite draughts engine like MobyDam. <br/>
+Move pieces on the board by point and click. <br/>
+If the draughts engine uses the Websocket protocol this browser client and the engine can directly be connected.
+<br/>
+
+<img id="imgConnect"  title="Connection"  alt="" border="0" src="include/images/connect.png"
+     style="display: block; margin: 10px auto;"  />
+
+Often draughts engines use the Tcp Socket protocol. <br/>
+But browser clients do not understand this protocol. <br/>
+To solve this problem an intermediate server has to put between client and engine.
+This server acts as a bridge for the messages between the client and the engine.  <br/> </br>
+
+<img id="imgBridge"  title="Bridge server"  alt="" border="0" src="include/images/bridge.png"
+     style="display: block; margin: 0 auto;"  />
+<br/> 
+
+One great advantage of using a browser client is that you are independent of the operating system (Linux, Windows, Mac). <br/> 
+The price you have to pay is the use of a bridge server. <br/> 
+Until draughts engines are designed to communicate directly with a browser client. <br/> 
+But it does not cost you anything, because the bridge server application is free to download.
+
+  </p>
+  <br/> 
+</div>  <!--  div_left_right_content_0  -->
+
+<!--  ===================================================================  -->
+
+<div id="div_left_right_content_1">
+  <!--  === content section 1 ===  -->
+  <br/>
+  <p> <strong> GAME CONTROL </strong> </p>
+  <br/>
+  <div style="margin: 4px 10px 4px 10px;">
+
+    <button onclick="setupFen(); return false;" class = "isButton" >
+       Setup Fen 
+    </button>
+    <input type="text" id="iFenString" value="W:B1-20:W31-50"   class = "isInput"
+           style="width: 270px " >
+    </br> </br>
+
+    <button onclick="printFen(); return false;"   class = "isButton" >
+       Print Fen 
+    </button>
+    </br> </br>
+
+    <button onclick="game.switchTurn(); return false;"  class = "isButton" >
+       Switch turn
+    </button>
+    </br> </br>
+
+    <button onclick="game.backOneMove(); return false;"  class = "isButton" >
+       Move back 
+    </button>
+    </br> </br>
+
+    <fieldset style="padding: 4px; width: 360px; " >
+       <legend>  Info  </legend>
+         <input id="iPlayInfo"  type="text" value="" 
+                style="width: 360px; font-size: 11px; border: 0px; background: none; " >
+    </fieldset>
+
+  </div>
+
+</div>  <!--  div_left_right_content_1  -->
+
+<!--  ===================================================================  -->
+
+<div id="div_left_right_content_2">
+  <!--  === content section 2 ===  -->
+  <br/>
+  <p> <strong> CONNECTION CONTROL </strong> </p>
+
+
+  </br> 
+  <div style="margin: 4px 10px 4px 10px;">
+    <button onclick="onOpenClick(); return false;" class = "isButton" >
+       Open
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    <span> host </span>
+    <input id="iHost" type="text" value="localhost"  class = "isInput"
+           style="width: 90px; margin: 0 10px 0 5px; " >
+
+    <span> port </span>
+    <input id="iPort" type="text" value="27532"  class = "isInput"
+           style="width: 40px; margin: 0 10px 0 5px; " >
+
+    </br> </br>
+
+    <button onclick="onCloseClick(); return false;"  class = "isButton" >
+       Close
+    </button>
+    </br> </br>
+
+    <button onclick="onSendInput(); return false;"  class = "isButton" >
+       Test send
+    </button>
+    <input type="text" id="iSendMessage" value=""  class = "isInput"
+           style="width: 270px; " >
+
+    </br> </br> </br>
+
+    <fieldset style="padding: 6px; width: 360px; " >
+       <legend>  Receive log </legend>
+         <div id="divLogLeft"  
+              style="width: 360px; overflow: auto; white-space: pre; font-size: 11px; " ></div>
+    </fieldset>
+    </br>
+    <fieldset style="padding: 6px; width: 360px; " >
+       <legend>  Send log </legend>
+         <div id="divLogRight" 
+              style="width: 360px; overflow: auto; white-space: pre; font-size: 11px; " ></div>
+    </fieldset>
+    </br>
+
+    <button onclick="onClearClick(); return false;"  class = "isButton" >
+       Clear log
+    </button>
+
+  </div>
+
+</div>  <!--  div_left_right_content_2  -->
+
+<!--  ===================================================================  -->
+
+<div id="div_left_right_content_3">
+  <!--  === content section 3 ===  -->
+  <br/>
+  <p> <strong> SENDING DXP MESSAGES </strong> </p>
+  <br/>
+
+  <div style="margin: 4px 10px 4px 10px;">
+
+    <button onclick="sendDxpChat(); return false;"  class = "isButton" >
+       Chat
+    </button>
+    <input id="iChat" type="text" value=""  class = "isInput"
+           style="width: 270px; " >
+
+    </br> </br>
+
+    <button onclick="sendDxpGamereq(); return false;"  class = "isButton" >
+       Game req
+    </button>
+
+    <span> &nbsp;&nbsp; You play with: </span>
+    <select id="selMyColor" name="mycolor"
+      style="background: none; border: 0px; color: inherit; font-size; inherit; font: inherit; "  >
+      <option value="0" selected > White </option>
+      <option value="1" > Black </option>
+    </select>
+    </br>
+    <input id="iNumMoves" type="text" value="50"  class = "isInput"
+           style="width: 25px; margin-left: 110px;" >
+    <span> moves in </span>
+    <input id="iGameTime" type="text" value="120"  class = "isInput"
+           style="width: 25px; " >
+    <span> minutes </span>
+
+    </br> </br>
+
+    <button onclick="sendDxpGameend(); return false;"  class = "isButton" >
+       Game end
+    </button>
+    <span> &nbsp;&nbsp; Reason </span>
+    <select id="selGameendReason" name="reason"
+      style="background: none; border: 0px; color: inherit; font-size; inherit; font: inherit; "  >
+      <option value="0" selected > 0: Unknown </option>
+      <option value="1" > 1: I have lost </option>
+      <option value="2" > 2: Draw </option>
+      <option value="3" > 3: Engine lost </option>
+    </select>
+
+    </br> </br>
+
+    <button onclick="sendDxpBackreq(); return false;"  class = "isButton" >
+       Back req
+    </button>
+
+    <input id="iNumMovesBack" type="text" value="2"  class = "isInput"
+           style="width: 25px; margin-left: 16px;" >
+    <span> plies back </span>
+
+    <br/>  <br/>  <br/>
+
+    <fieldset style="padding: 4px; width: 360px; " >
+       <legend>  Info  </legend>
+         <input id="iDxpInfo"  type="text" value=""
+                style="width: 360px; font-size: 11px; border: 0px; background: none; " >
+    </fieldset>
+
+  </div>
+</div>  <!--  div_left_right_content_3  -->
+
+<!--  ===================================================================  -->
+
+<div id="div_left_right_content_7">
+  <!--  === Chess Diagram Maker: content section 7 ===  -->
+  <br/>
+  <p> <b> HELP </b>  <br/>
+  The user interface consists of sections.
+  You can make them visible by pressing the buttons left.
+  </p>
+  <br/>
+<!-- ========================================================================== -->
+
+<div> 
+  <p>
+    <a href= "javascript:unhide('divDescription_01');"  class="isDescriptionLink" >
+      <b> 1. Game control. </b>
+    </a> 
+  </p>
+</div>
+
+<div id="divDescription_01"  class="isHidden" style="margin: 10px; " >
+
+You setup a position by entering a FEN string. <br/>
+Examples of a FEN string are:  <br/>
+<ul>
+<li> W:B1-20:W31-50 (starting position)</li>
+<li> W:W:B. (empty position) </li>
+<li> W:W17,28,32,33,38,41,43:B10,18-20,23,24,37. </li>
+<li> W:WK3,25,34,45:B38,K47. (two Kings) </li>
+</ul>
+Each move can be undone by pushing the button "Move back". <br/>
+This is different if you play a game against a draughts engine.
+Then you send a back request message to the engine.  <br/>
+The line at the bottom gives info about the status of the game. <br/>
+
+<br/> <hr>
+</div>   <!-- divDescription_01 -->
+
+<br/>
+<!-- ========================================================================== -->
+<div> 
+  <p>
+    <a href= "javascript:unhide('divDescription_02');"  class="isDescriptionLink" > 
+       <b> 2. Connection control.  </b>
+    </a> 
+  </p>
+</div>
+
+<div id="divDescription_02"  class="isHidden" style="margin: 10px; " >
+To play against a draughts engine you have to communicate with the engine. <br/>
+It is easy to setup a default connection where the communication between all applications are on the same computer. <br/>
+Three steps to setup a default connection (in this order).
+
+<ol>
+  <li> Start the draughts engine (use port 27531).  </li>
+  <li> Start the bridge server with the auto option. </li>
+  <li> In the browser client open a default connection. </li>
+</ol>
+
+Now you are able to play a game against the draughts engine. 
+You are ready to send messages to the engine. <br/>
+See the section "Sending messages". <br/>
+The text boxes "Receive log" and "Send log" shows important info about the exchange of messages.  <br/>
+
+<br/> <hr>
+</div>   <!-- divDescription_02 -->
+<br/>
+
+<!-- ========================================================================== -->
+
+<div> 
+  <p>
+    <a href= "javascript:unhide('divDescription_03');"  class="isDescriptionLink" > 
+       <b> 3. Sending messages.  </b>
+    </a> 
+  </p>
+</div>
+
+<div id="divDescription_03"  class="isHidden" style="margin: 10px; " >
+Once you have a connection with a draughts engine, you can send messages and play a game against the engine. <br/>
+The messages follow the rules of the <i>damexchange</i> protocol. <br/>
+This browser client acts as initiator. <br/>
+The messages you can send are: <br/>
+<ul>
+
+<li> CHAT: <br/>
+Send a message to the engine.
+</li>
+
+<li> GAME REQUEST: <br/>
+This is the most important message you can send. You ask the engine to start a game. Before sending this message, setup the position to start the game and set the color you wish to play. <br/>
+After this message is send, the engine confirms the start of a new game.
+</li>
+
+<li> GAME END: <br/>
+You can formally end the game by sending a game end message. <br/>
+</li>
+
+<li> BACK REQUEST: <br/>
+If it is your turn, you can ask the engine to play back some number of plies (ply denotes a half-move). Wait until the engine confirms the play back option. It does not always support it. <br/>
+</li>
+
+</ul>
+Keep eyes on the info box. It has important info about the exchange of messages.  <br/>
+
+<br/> <hr>
+</div>   <!-- divDescription_03 -->
+<br/>
+<!-- ========================================================================== -->
+
+
+<div> 
+  <p>
+    <a href= "javascript:unhide('divDescription_04');"  class="isDescriptionLink" > 
+       <b> 4. And further ... </b>
+    </a> 
+  </p>
+</div>
+
+<div id="divDescription_04"  class="isHidden" style="margin: 10px; " >
+
+At the bottom of each section, a line is displayed with status info. <br/>
+<ul>
+<li> The name of the engine, if connected. </li>
+<li> If a websocket connection is active. </li>
+<li> If a game is started against the engine. </li>
+<li> Who is in turn. </li>
+</ul>
+<br/>
+
+Download the bridge-server at: 
+<a href="https://github.com/akalverboer/web2tcp_bridge"> Web2Tcp Bridge</a>. <br/>
+The readme gives information how to setup a connection. <br/> <br/>
+
+The draughts engine must fulfill the following conditions: <br/>
+<ul>
+<li> application protocol: Tcp Socket or Websocket protocol </li>
+<li> messageing protocol: Damexchange (DXP)  </li>
+<li> the draughts engine has the role of follower </li>
+</ul>
+
+<br/>
+Last change: 2018-04-25 <br/>
+&#169; Copyright: Arthur Kalverboer  <br/>
+
+<br/> <hr>
+
+</div>   <!-- divDescription_04 -->
+<br/>
+
+<br/>
+<!-- ========================================================================== -->
+
+  <br/> <br/>
+</div>  <!--  div_left_right_content_7  -->
+<!-- === END SECTIONS WITH SWITCHABLE CONTENT === -->
+
+      </div>  <!-- div_content3 -->
+    </div> 
+  </div>  
+
+  <!--  LEFT_LEFT  -->
+  <div id="div_left_left">
+    <div id="div_left_left_content">
+      <div id="div_content4" >
+        <!-- ========== CONTENT LEFT-LEFT ========== -->
+<img id="butContent0"  title="Intro"  alt="C0" class="isContentSwitch" border="0" onclick = "enableContent(0)"
+     src="include/images/icon_door.png"
+/>
+
+<img id="butContent1"  title="Game control"  alt="C1" class="isContentSwitch" border="0" 
+     onclick = "enableContent(1)"  src="include/images/icon_game.png"
+/>
+<img id="butContent2"  title="Connection control"  alt="C2" class="isContentSwitch" border="0" 
+     onclick = "enableContent(2)"  src="include/images/icon_conn.png"
+/>
+<img id="butContent3"  title="Damexchange messages"  alt="C3" class="isContentSwitch" border="0" onclick = "enableContent(3)"
+     src="include/images/icon_protocol.png"
+/>
+<img id="butContent7"  title="Help"  alt="C7" class="isContentSwitch" border="0" onclick = "enableContent(7)"
+     src="include/images/icon_question.png"
+/>
+      </div>  <!-- div_content4 -->
+    </div>  
+  </div> 
+
+  <div id="div_left_footer">
+    <div id="div_content5" >
+      <span>  Engine: - </span>
+      <span>  No connection </span>
+      <span>  No game </span>
+      <span>  Turn: You (white) </span>
+    </div>  <!-- div_content5 -->
+  </div>
+
+  </div>  <!--  div_left_content  -->
+  </div>  <!--  div_left  -->
+</div>  <!--  div_page  -->
+
+<!--  ===================================================================  -->
+<div id="div_boardImages" style="display: none; outline: #00FF00 dotted thick;" >
+      <!-- *** These images must be preloaded before the canvas write these images!!! *** -->      
+      <img id= "spr_th01_png" src="include/images/spr_th01.png" alt="spr_th01.png" /> <br/>
+      <img id= "spr_th01_svg" src="include/images/spr_th01.svg" alt="spr_th01.svg" /> <br/>
+      <img id= "spr_th02_svg" src="include/images/spr_th02.svg" alt="spr_th02.svg" /> <br/>
+      <img id= "spr_th60_svg" src="include/images/spr_th60.svg" alt="spr_th60.svg" /> <br/>
+      <img id= "spr_th61_svg" src="include/images/spr_th61.svg" alt="spr_th61.svg" /> <br/>
+</div>
+<!--  ===================================================================  -->
+
+<!--  === END HTML SECTION ===  -->
+
+<script type="text/javascript"> 
+//<![CDATA[
+
+if (!('WebSocket' in window)) {
+   alert("WebSockets are not supported by this browser!!");
+}
+enableContent(0);  // initial content-switch for left-right section
+window.onload = function() { initPage(); };  // defaults on loading page
+
+function initPage() {
+   window.myCanvas = new CanvasHandler();
+   window.myCanvas.initEventListener();
+
+   var str_setup;   var arr_setup;
+   str_setup = BOARD_START;
+   //str_setup = BOARD_EMPTY;
+   //str_setup = BOARD_TEST_01;
+   //arr_setup = str_setup.split("") // split into char-array
+
+   window.game = new Game();
+   game.init(str_setup, C.WHITE);
+
+   //var fen = "W:W16,21,25,32,37,38,41,42,45,46,49,50:B8,9,12,17,18,19,26,29,30,33,34,35,36.";
+   //game.initFromFen(fen);
+
+   var pos = game.newPosition();
+   game.xprint()
+
+   updateFooter();
+
+   //var legalMoves = game.legalMoves();
+   //for (j in legalMoves) {
+   //   console.log("legalMoves: " + legalMoves[j].steps + " " + legalMoves[j].takes);
+   //}
+
+   document.getElementById("iHost").value = ws.host;
+   document.getElementById("iPort").value = ws.port;
+
+   return 0;
+}  // initPage
+
+function enableContent(iParm) {
+  // Called by user with button to show div
+  disableContent();
+
+  switch(iParm) { 
+    case 0: 
+      document.getElementById("div_left_right_content_0").style.display = "block";
+      document.getElementById("butContent0").className = "isContentSwitch  isActive";
+      break;
+    case 1: 
+      document.getElementById("div_left_right_content_1").style.display = "block";
+      document.getElementById("butContent1").className = "isContentSwitch  isActive";
+      break;
+    case 2: 
+      document.getElementById("div_left_right_content_2").style.display = "block";
+      document.getElementById("butContent2").className = "isContentSwitch  isActive";
+      break;
+    case 3: 
+      document.getElementById("div_left_right_content_3").style.display = "block";
+      document.getElementById("butContent3").className = "isContentSwitch  isActive";
+      break;
+    case 7: 
+      document.getElementById("div_left_right_content_7").style.display = "block";
+      document.getElementById("butContent7").className = "isContentSwitch  isActive";
+      break;
+    default: ;
+  }
+  return 0
+}  // enableContent
+
+function disableContent() {
+  // Disable showing all content alternatives
+  document.getElementById("div_left_right_content_0").style.display = "none";
+  document.getElementById("div_left_right_content_1").style.display = "none";
+  document.getElementById("div_left_right_content_2").style.display = "none";
+  document.getElementById("div_left_right_content_3").style.display = "none";
+  document.getElementById("div_left_right_content_7").style.display = "none";
+
+  document.getElementById("butContent0").className = "isContentSwitch";
+  document.getElementById("butContent1").className = "isContentSwitch";
+  document.getElementById("butContent2").className = "isContentSwitch";
+  document.getElementById("butContent3").className = "isContentSwitch";
+  document.getElementById("butContent7").className = "isContentSwitch";
+  return 0
+
+} // disableContent
+
+// ************************************************************************************************
+
+//]]>
+</script>
+
+</body>
+</html>
+
