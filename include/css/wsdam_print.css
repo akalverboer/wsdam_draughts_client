@@ -1,0 +1,24 @@
+/*
+||======================================================================================
+|| This stylesheet is part of Chess Diagram Maker, version 17.03.1
+|| Content: Stylesheet for printstyle of page.
+||
+|| Copyright (c) 2017 Arthur Kalverboer
+||======================================================================================
+*/
+
+
+#div_left {
+  display: none;
+}
+
+body {
+  background: #FFF;
+}
+
+#div_right {
+  float: left;
+  margin: 0 auto;
+}
+
+

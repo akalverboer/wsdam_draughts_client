@@ -1,0 +1,141 @@
+/*
+||======================================================================================
+|| This stylesheet is part of xxxxxxxxxxxxxx
+|| Content: stylesheet for page related issues
+||
+|| (c) 2018 Arthur Kalverboer
+||======================================================================================
+*/
+
+h1, h2, h3, h4, h5, h6 {
+  color: #000;
+  font-family: Verdana, Arial, Comic Sans MS;
+}
+
+canvas {
+  margin: 0 20px 20px 30px;
+  border: 2px solid #1e3333;
+  vertical-align: top;
+  cursor: pointer;
+  background-color: white;  /* checkered background to visualize transparency */
+  background-image:
+     linear-gradient(45deg, #bbb 25%, transparent 25%, transparent 75%, #bbb 75%, #bbb),
+     linear-gradient(45deg, #bbb 25%, transparent 25%, transparent 75%, #bbb 75%, #bbb);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+/* ==== CLEAR CLASS ===== */
+.clear { clear: both; }
+
+ol, ul { 
+  margin: 0px;
+  padding-left: 20px;
+  border: 0px solid black;
+}
+
+ol li {
+  margin: 5px 5px 5px 0;
+}
+
+ul li {
+  margin: 5px 5px 5px -5px;
+}
+
+form {
+  margin: 10px; 
+}
+
+fieldset { 
+  border-width: 2px; 
+  border-style: inset;
+  border-color: #999999 #000000 #000000 #999999; 
+}
+
+legend { 
+  display: block;
+  padding-left: 12px;
+  padding-right: 12px;
+  border: none;
+}
+
+.isButton {
+  height: 28px;
+  width: 90px;
+  border: 3px double #666;
+  cursor: pointer;
+  background: #BBB;
+  color: #1E3333;
+}
+
+.isHidden { 
+  display: none; 
+}
+
+.isVisible {
+  display: block;
+}
+
+a {
+  color: #1E3333;
+  font-weight: italic;
+}
+
+a.link_as_button {
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none; 
+  padding: 0;
+  margin: 0;
+}
+
+a.isDescriptionLink {
+  color: #1E3333;
+  text-decoration: none; 
+  cursor: pointer;
+}
+
+.isInput {
+  color: #1E3333;
+  font-size: 11px;
+  border-width: 2px; 
+  border-style: inset;
+  border-color: #999999 #000000 #000000 #999999; 
+  padding: 4px;
+  background: none;
+}
+
+.isSlider {
+  float: right;
+  cursor: pointer;
+  background: #CC9C88;
+  vertical-align: middle;
+  padding: 4px;
+  border: 2px solid #333; 
+  margin: 0 10px 0 0;
+  height: 1.0em;
+  width: 175px;
+}
+
+/* ===================================================== */
+.isContentSwitch {
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  margin: 0 0 0 0;
+  padding: 0;
+  background-color: #BBB; 
+  border-width: 0 2px 2px 0;
+  border-style: solid;
+  border-color: #4D4D4D;
+}
+
+.isContentSwitch.isActive {
+  width: 50px;
+  background-color: #EEE;
+  border-width: 0 0 2px 0;
+}
+
+
+/* ======================================================== */
+

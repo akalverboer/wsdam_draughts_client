@@ -1,0 +1,147 @@
+/*
+||======================================================================================
+|| This stylesheet is part of Chess Diagram Maker, version 17.03.1
+|| Content: stylesheet for base related issues
+||
+|| Copyright (c) 2017 Arthur Kalverboer
+||======================================================================================
+*/
+
+
+/*
+MAIN STRUCTURE:
+div_page
+  div_right
+    div_right_content
+  div_left
+    div_left_content
+       div_left_header
+       div_left_right
+          div_left_right_content
+             div_left_right_content_1
+             div_left_right_content_2
+             ...
+       div_left_left
+          div_left_left_content
+       div_left_footer
+*/
+
+
+html {
+   margin: 0;
+   padding: 20px;
+}
+
+body {
+   font-family: Verdana, Arial, Comic Sans MS;
+   font-size: 12px;
+   color: #1E3333;
+   margin: 0;
+   padding: 0;
+   background: #BFAF80; 
+   xxbackground-image: url("images/lrock027.jpg");
+   background-image: url("images/cloth029.jpg");
+}
+
+p {
+   margin: 0 10px 0 10px;
+}
+
+#div_page {
+   width: 100%;
+   padding: 0;
+}
+
+/* left + right >> total width: 100%; width left: 450px */
+#div_right {
+   float: left;
+   width: 100%;
+}
+#div_left {
+   float: left;
+   width: 450px;    /* width left 450px */
+   margin-left: -100%;
+   background: #EEE;
+   border: 4px solid #444;
+}
+
+#div_right_content {
+   margin-left: 450px;    /* width left 450px */
+}
+#div_right_content p {
+   line-height:1.4;
+}
+
+/* left_left + left_right >> total width left: 450px 
+   width left_left: 50px >> width left_right = 450-50
+*/
+#div_left_content {
+   width: 450px;       /* width left 450px */
+   margin: 0 auto;
+   clear: left;
+   text-align: left;
+}
+#div_left_content p {
+   line-height:1.4;
+}
+
+#div_left_right {
+   float: left;
+   width: 100%;
+}
+
+#div_left_right_content {
+   margin: 0 0 0 50px;  /* width left_left 50px */
+   background: #EEE;
+   color: #1E3333;
+}
+
+#div_left_left_content {
+   float: left;
+   width: 50px;          /* width left_left 50px */
+   margin-left: -450px;  /* width left 450px */
+   min-height: 600px;
+   background: #EEE;
+}
+
+/* ================================================ */
+#div_left_header {
+   height: 50px;
+   margin: 0;
+   padding-left: 5px;
+   font-size: 22px;
+   color: #1E3333;
+   background: #BBB;
+   border-bottom: 2px solid #333;
+}
+
+#div_left_footer {
+   clear:left;
+   width:100%;
+   color: white;
+   background: #555;
+   border-top: 2px solid #333;
+}
+#div_left_footer span {
+   font-size: 10px; 
+   line-height: 20px;
+   text-align: middle;
+   margin:0;
+   padding: 5px 5px;
+}
+
+#div_left_footer a {
+   font-size: 8px; 
+   line-height: 16px;
+   text-align: middle;
+   margin: 0 0 0 10px;
+   padding: 2px 10px;
+   cursor: pointer;
+   text-decoration: none;
+   font-weight: normal;
+   background: #B9CCA8;
+   border: 1px solid white;
+}
+
+/* ================================================ */
+
