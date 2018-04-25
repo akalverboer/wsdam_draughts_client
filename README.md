@@ -2,12 +2,11 @@ Webclient for 10x10 draughts
 ----------------------------
 Play against your favorite draughts engine like MobyDam. <br/>
 Move pieces on the board by point and click. <br/>
-If the draughts engine uses the Websocket protocol this browser client and the engine can directly be connected. <br/>
+This browser client and a draughts engine can be directly connected if the engine uses the Websocket protocol.  <br/>
 
 ![connect](include/images/connect.png)
 
-Often draughts engines use the Tcp Socket protocol. <br/>
-But browser clients do not understand this protocol. <br/>
+Often draughts engines use the Tcp Socket protocol. But browser clients do not understand this protocol. <br/>
 To solve this problem an intermediate server has to put between client and engine.  <br/>
 This server acts as a bridge for the messages between the client and the engine. <br/>
 
