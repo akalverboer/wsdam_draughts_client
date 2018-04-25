@@ -23,5 +23,6 @@ Links
 Use these links to setup an environment where you can play against the draughts engine MobyDam.
 - [Github MobyDam Draughts engine](https://github.com/rhalbersma/mobydam)
 - [Github Web2Tcp Bridge Server](https://github.com/akalverboer/web2tcp_bridge)
+- [Website WsDam webclient](http://svg_experimenten.deds.nl/wsdam/wsdam.html)
 
 <hr/>
