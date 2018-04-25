@@ -20,6 +20,6 @@ But it does not cost you anything, because the bridge server application is free
 
 Links
 -----
-Use these links to play against the draughts engine MobyDam.
+Use these links to setup an environment where you can play against the draughts engine MobyDam.
 - [Github MobyDam Draughts engine](https://github.com/rhalbersma/mobydam)
 - [Github Web2Tcp Bridge Server](https://github.com/akalverboer/web2tcp_bridge)
