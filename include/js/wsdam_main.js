@@ -208,6 +208,7 @@ window.Game = function() {
       this.clicks = {};
       this.his = [];
       this.xprint();
+      updateFooter();
       return 0;
    }  // initFromFen()
 
