@@ -9,7 +9,7 @@
   <meta name="lang" content="english" />
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <meta name="description" content="Webclient for 10x10 Draughts" />
-  <meta name="keywords" content="bridge server, websockets, tcp,ip, sockets, protocol" />
+  <meta name="keywords" content="draughts, bridge server, websockets, tcp,ip, sockets, protocol" />
   <meta name="date" content="2018-03-08 19:40" />
 
   <meta property="og:title" content="WsDam" />
@@ -122,7 +122,7 @@ But it does not cost you anything, because the bridge server application is free
        Setup Fen 
     </button>
     <input type="text" id="iFenString" value="W:B1-20:W31-50"   class = "isInput"
-           style="width: 270px " >
+           style="width: 270px; vertical-align: bottom; " >
     </br> </br>
 
     <button onclick="printFen(); return false;"   class = "isButton" >
@@ -130,12 +130,35 @@ But it does not cost you anything, because the bridge server application is free
     </button>
     </br> </br>
 
-    <button onclick="game.switchTurn(); return false;"  class = "isButton" >
+    <button onclick="switchSetupmode(); return false;"  class = "isButton"
+            style="vertical-align: bottom; " title="Toggle setup mode" >
+       Setup mode
+    </button>
+    <div id="divPieceSelection" >
+       <div id="div_pieceIcon_wm" class="pieceIcons" onclick = "selectPieceIcon(this, 'w')"  title="White man" >
+            <img id="img_pieceIcon_wm"  src="include/images/spr_th60.svg" alt="?"  />
+       </div>
+       <div id="div_pieceIcon_bm" class="pieceIcons" onclick = "selectPieceIcon(this, 'b')"  title="Black man" >
+            <img id="img_pieceIcon_bm"  src="include/images/spr_th60.svg" alt="?"  /> 
+       </div>
+       <div id="div_pieceIcon_wk" class="pieceIcons" onclick = "selectPieceIcon(this, 'W')"  title="White king" >
+            <img id="img_pieceIcon_wk"  src="include/images/spr_th60.svg" alt="?"  />
+       </div>
+       <div id="div_pieceIcon_bk" class="pieceIcons" onclick = "selectPieceIcon(this, 'B')"  title="Black king" >
+            <img id="img_pieceIcon_bk"  src="include/images/spr_th60.svg" alt="?"  />
+       </div>
+       <div id="div_pieceIcon_cl" class="pieceIcons" onclick = "selectPieceIcon(this, '0')"  title="Trash" >
+            <img id="img_pieceIcon_cl"  src="include/images/trash.png" alt="?"  />
+       </div>
+    </div>
+    </br> </br>
+
+    <button onclick="switchTurn(); return false;"  class = "isButton" title="Toggle switch turn" >
        Switch turn
     </button>
     </br> </br>
 
-    <button onclick="game.backOneMove(); return false;"  class = "isButton" >
+    <button onclick="backOneMove(); return false;"  class = "isButton" >
        Move back 
     </button>
     </br> </br>
@@ -166,11 +189,11 @@ But it does not cost you anything, because the bridge server application is free
     &nbsp;&nbsp;&nbsp;
     <span> host </span>
     <input id="iHost" type="text" value="localhost"  class = "isInput"
-           style="width: 90px; margin: 0 10px 0 5px; " >
+           style="width: 90px; margin: 0 10px 0 5px; vertical-align: bottom;" >
 
     <span> port </span>
     <input id="iPort" type="text" value="27532"  class = "isInput"
-           style="width: 40px; margin: 0 10px 0 5px; " >
+           style="width: 40px; margin: 0 10px 0 5px; vertical-align: bottom;" >
 
     </br> </br>
 
@@ -183,7 +206,7 @@ But it does not cost you anything, because the bridge server application is free
        Test send
     </button>
     <input type="text" id="iSendMessage" value=""  class = "isInput"
-           style="width: 270px; " >
+           style="width: 270px; vertical-align: bottom; " >
 
     </br> </br> </br>
 
@@ -222,7 +245,7 @@ But it does not cost you anything, because the bridge server application is free
        Chat
     </button>
     <input id="iChat" type="text" value=""  class = "isInput"
-           style="width: 270px; " >
+           style="width: 270px; vertical-align: bottom; " >
 
     </br> </br>
 
@@ -263,9 +286,8 @@ But it does not cost you anything, because the bridge server application is free
     <button onclick="sendDxpBackreq(); return false;"  class = "isButton" >
        Back req
     </button>
-
     <input id="iNumMovesBack" type="text" value="2"  class = "isInput"
-           style="width: 25px; margin-left: 16px;" >
+           style="width: 25px; margin-left: 16px; vertical-align: bottom; " >
     <span> plies back </span>
 
     <br/>  <br/>  <br/>
@@ -289,14 +311,10 @@ But it does not cost you anything, because the bridge server application is free
   You can make them visible by pressing the buttons left.
   </p>
   <br/>
-<!-- ========================================================================== -->
 
-<div> 
-  <p>
-    <a href= "javascript:unhide('divDescription_01');"  class="isDescriptionLink" >
-      <b> 1. Game control. </b>
-    </a> 
-  </p>
+<!-- ========================================================================== -->
+<div onclick="unhide('divDescription_01')" style="cursor: pointer; margin: 0 0 0 10px;" > 
+   <b> 1. Game control. </b>
 </div>
 
 <div id="divDescription_01"  class="isHidden" style="margin: 10px; " >
@@ -309,22 +327,22 @@ Examples of a FEN string are:  <br/>
 <li> W:W17,28,32,33,38,41,43:B10,18-20,23,24,37. </li>
 <li> W:WK3,25,34,45:B38,K47. (two Kings) </li>
 </ul>
-Each move can be undone by pushing the button "Move back". <br/>
+<br/>
+A button allows you to toggle between setup mode and move mode.
+In setup mode you can setup pieces by mouse clicks. <br/>
+To indicate setup mode the board has a red touch. <br/> <br/>
+Each move can be undone by the button "Move back". <br/>
 This is different if you play a game against a draughts engine.
-Then you send a back request message to the engine.  <br/>
-The line at the bottom gives info about the status of the game. <br/>
+Then you send a back request message to the engine.  <br/><br/>
+An info box displays information about the game.  <br/>
 
 <br/> <hr>
 </div>   <!-- divDescription_01 -->
-
 <br/>
+
 <!-- ========================================================================== -->
-<div> 
-  <p>
-    <a href= "javascript:unhide('divDescription_02');"  class="isDescriptionLink" > 
-       <b> 2. Connection control.  </b>
-    </a> 
-  </p>
+<div onclick="unhide('divDescription_02')" style="cursor: pointer; margin: 0 0 0 10px;" > 
+   <b> 2. Connection control. </b>
 </div>
 
 <div id="divDescription_02"  class="isHidden" style="margin: 10px; " >
@@ -348,13 +366,8 @@ The text boxes "Receive log" and "Send log" shows important info about the excha
 <br/>
 
 <!-- ========================================================================== -->
-
-<div> 
-  <p>
-    <a href= "javascript:unhide('divDescription_03');"  class="isDescriptionLink" > 
-       <b> 3. Sending messages.  </b>
-    </a> 
-  </p>
+<div onclick="unhide('divDescription_03')" style="cursor: pointer; margin: 0 0 0 10px;" > 
+   <b> 3. Sending messages. </b>
 </div>
 
 <div id="divDescription_03"  class="isHidden" style="margin: 10px; " >
@@ -387,20 +400,15 @@ Keep eyes on the info box. It has important info about the exchange of messages.
 <br/> <hr>
 </div>   <!-- divDescription_03 -->
 <br/>
+
 <!-- ========================================================================== -->
-
-
-<div> 
-  <p>
-    <a href= "javascript:unhide('divDescription_04');"  class="isDescriptionLink" > 
-       <b> 4. And further ... </b>
-    </a> 
-  </p>
+<div onclick="unhide('divDescription_04')" style="cursor: pointer; margin: 0 0 0 10px;" > 
+   <b> 4. And further ... </b>
 </div>
 
 <div id="divDescription_04"  class="isHidden" style="margin: 10px; " >
 
-At the bottom of each section, a line is displayed with status info. <br/>
+At the bottom of the page, a line displays status info. <br/>
 <ul>
 <li> The name of the engine, if connected. </li>
 <li> If a websocket connection is active. </li>
@@ -421,7 +429,7 @@ The draughts engine must fulfill the following conditions: <br/>
 </ul>
 
 <br/>
-Last change: 2018-04-25 <br/>
+Last change: 2018-04-30 <br/>
 &#169; Copyright: Arthur Kalverboer  <br/>
 
 <br/> <hr>
@@ -429,7 +437,6 @@ Last change: 2018-04-25 <br/>
 </div>   <!-- divDescription_04 -->
 <br/>
 
-<br/>
 <!-- ========================================================================== -->
 
   <br/> <br/>
@@ -497,6 +504,7 @@ Last change: 2018-04-25 <br/>
 if (!('WebSocket' in window)) {
    alert("WebSockets are not supported by this browser!!");
 }
+
 enableContent(0);  // initial content-switch for left-right section
 window.onload = function() { initPage(); };  // defaults on loading page
 
@@ -512,15 +520,12 @@ function initPage() {
 
    window.game = new Game();
    game.init(str_setup, C.WHITE);
+   initPieceIcons();
 
    //var fen = "W:W16,21,25,32,37,38,41,42,45,46,49,50:B8,9,12,17,18,19,26,29,30,33,34,35,36.";
    //game.initFromFen(fen);
 
-   var pos = game.newPosition();
-   game.xprint()
-
-   updateFooter();
-
+   //var pos = game.newPosition();
    //var legalMoves = game.legalMoves();
    //for (j in legalMoves) {
    //   console.log("legalMoves: " + legalMoves[j].steps + " " + legalMoves[j].takes);
