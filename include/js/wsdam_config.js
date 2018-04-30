@@ -10,7 +10,7 @@
 */
 
 C = {}  // global constants
-C.VERSION = "2018.05.1";
+C.VERSION = "2018.04.30";
 C.INITIATOR = "WsDam " + "(" + C.VERSION + ")";   // name DXP protocol
 C.APPNAME = {short:"WsDam", long:"WsDam Draughts Client", github: "wsdam_draughts_client"};
 C.DESCR = "Webclient for 10x10 draughts";
