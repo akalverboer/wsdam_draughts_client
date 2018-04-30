@@ -1,6 +1,6 @@
 /*
 ||======================================================================================
-|| This stylesheet is part of xxxxxxxxxxxxxx
+|| This stylesheet is part of wsdam
 || Content: stylesheet for page related issues
 ||
 || (c) 2018 Arthur Kalverboer
@@ -66,6 +66,7 @@ legend {
   cursor: pointer;
   background: #BBB;
   color: #1E3333;
+  padding: 0px;
 }
 
 .isHidden { 
@@ -79,20 +80,6 @@ legend {
 a {
   color: #1E3333;
   font-weight: italic;
-}
-
-a.link_as_button {
-  text-align: center;
-  cursor: pointer;
-  text-decoration: none; 
-  padding: 0;
-  margin: 0;
-}
-
-a.isDescriptionLink {
-  color: #1E3333;
-  text-decoration: none; 
-  cursor: pointer;
 }
 
 .isInput {
@@ -135,6 +122,62 @@ a.isDescriptionLink {
   background-color: #EEE;
   border-width: 0 0 2px 0;
 }
+
+/* ======================================================== */
+#divPieceSelection {
+  display: inline;
+  height: 24px;
+  background: none;
+  border: 2px  solid #555555; 
+  padding: 12px 2px 0px 2px;
+  margin: 0 0 0 144px;
+}
+
+div.pieceIcons {
+  display: inline-block;
+  position: relative; 
+  overflow: hidden; 
+  width: 20px; 
+  height: 20px; 
+  padding: 0px;
+  border: 0px solid black;
+  margin: 0 2px 0 0;
+}
+
+div.pieceIcons.active {
+	outline: 2px solid #C40000;
+}
+
+div.pieceIcons img {
+  position: absolute; 
+  width: 80px;          /* set width/height proportionally, to scale the sprite image */
+  height: 20px; 
+}
+
+#div_pieceIcon_bk img {
+  top: 0px;             /* select image from sprite with top/left properties */
+  left: 0px;
+}
+#div_pieceIcon_bm img {
+  top: 0px;             /* select image from sprite with top/left properties */
+  left: -20px;
+}
+#div_pieceIcon_wk img {
+  top: 0px;             /* select image from sprite with top/left properties */
+  left: -40px;
+}
+#div_pieceIcon_wm img {
+  top: 0px;             /* select image from sprite with top/left properties */
+  left: -60px;
+}
+#div_pieceIcon_cl img { 
+  position: absolute;
+  top: 0px; 
+  left: 0px; 
+  width: 20px; 
+  height: 20px; 
+}
+
 
 
 /* ======================================================== */
