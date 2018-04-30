@@ -99,6 +99,18 @@ function isSuperset(arr1, arr2) {
    return bool;
 }  // isSuperset
 
+window.StopWatch = function() {
+   this.startMilliSec = 0;
+   this.elapsedMilliSec = 0;
+   this.start = function() {
+      this.startMilliSec = new Date().getTime();
+   }
+   this.stop = function() {
+      this.elapsedMilliSec = new Date().getTime() - this.startMilliSec;
+   }
+   return this;
+}  // StopWatch()
+
 window.CanvasHandler = function() {
    this.canvas = document.getElementById('myCanvas'); 
    this.canvas.width = C.CANVAS_SIZE.w;
@@ -168,6 +180,9 @@ window.Game = function() {
    this.started = false;
    this.myColor = C.WHITE;  // Color of player where opponent is server.
    this.engine = "";        // Name of engine
+   this.stopwatch = new StopWatch();  // To measure thinking time of a move
+   this.stopwatch.start();
+   this.setupmode = false;  // If true, manual setup by mouse clicks
 
    // === METHODS ===
    this.init = function(iSetup, iColor) {
@@ -186,8 +201,22 @@ window.Game = function() {
       }
       this.clicks = {};
       this.his = [];
+      this.stopwatch.start();
+      this.xprint();
+      updateFooter();
       return 0;
    }  // init()
+
+   this.update = function(iSetup, iColor) {
+      // Updates game setup and color. History unchanged.
+      this.setup = iSetup;
+      this.color = iColor;
+      this.clicks = {};
+      this.stopwatch.start();  // start count for next move
+      this.xprint();
+      updateFooter();
+      return 0;
+   }  // update()
 
    this.initFromFen = function(iFen) {
       // Set position with given fen string.
@@ -203,12 +232,8 @@ window.Game = function() {
       board.push("0");
 
       ///this.color = (sideToMove == "W") ? C.WHITE : C.BLACK; // alternatively
-      this.color = {W: C.WHITE, B: C.BLACK}[sideToMove];
-      this.setup = board;
-      this.clicks = {};
-      this.his = [];
-      this.xprint();
-      updateFooter();
+      var color = {W: C.WHITE, B: C.BLACK}[sideToMove];
+      this.init(board, color);
       return 0;
    }  // initFromFen()
 
@@ -226,7 +251,6 @@ window.Game = function() {
 
    this.toFEN = function() {
       // Returns FEN string of current setup with colorToMove indication.
-      // Called by user.
       var sideToMove = ['W', 'B'][this.color];
       var whitePieces = "";
       var first = true;
@@ -252,6 +276,14 @@ window.Game = function() {
 
    this.onSquareClick = function(mousePos, keysPressed) {
       // Called by mousedown on the canvas. Executes only if dark square selected.
+      // Argument 'mousePos' is selected row/col
+      if (game.setupmode == true)   this.tryToSetup(mousePos);
+      else  this.tryToMove(mousePos);
+      return 0;
+   }  // onSquareClick()
+
+   this.tryToMove = function(mousePos) {
+      // Called by onSquareClick. Executes only if setupmode is false (movemode).
       // Argument 'mousePos' is selected row/col
 
       if (this.started == true && this.color != this.myColor) {
@@ -296,7 +328,17 @@ window.Game = function() {
       }
 
       return 0;
-   }  // onSquareClick()
+   }  // tryToMove()
+
+   this.tryToSetup = function(mousePos) {
+      // Called by onSquareClick. Executes only if setupmode is true.
+      // Argument 'mousePos' is selected row/col
+      var number = rowcolToNumber(mousePos.row, mousePos.col);
+      var pcode = {'w': 'P', 'W': 'K', 'b': 'p', 'B': 'k', '0': '.'};
+      this.setup[number] = pcode[window.pieceSelector];
+      this.xprint();
+      return 0;
+   }  // tryToSetup()
 
    this.clickedNumbers = function() {
       // Convert clicked row/col to square numbers.
@@ -385,36 +427,27 @@ window.Game = function() {
 
       var newpos = pos.domove(move);
 
+
+      this.info("Last move: " + moveToString(iMove) );
+
       // add old position to history
       this.addHis(this.color, this.setup);
 
+      this.stopwatch.stop();
+      var timeSpend = Math.round(this.stopwatch.elapsedMilliSec/1000);  // seconds
+      //console.log("Time spend sec: " + timeSpend);
+
       if (this.started == true && this.color == this.myColor) {
-         sendDxpMove(iMove);
+         sendDxpMove(iMove, timeSpend);
       }
 
-      // update new position
-      if (this.color == C.WHITE)  this.setup = newpos.setup;
-      else  this.setup = newpos.setup.map(swapCase).reverse();
-
-      this.color = 1 - this.color;   // switch to other color
-      this.clicks = {};
-
-      this.xprint();
-      updateFooter();
+      // Update new position
+      if (this.color == C.WHITE)  var newSetup = newpos.setup;
+      else  var newSetup = newpos.setup.map(swapCase).reverse();
+      var newColor = 1 - this.color;   // switch to other color
+      this.update(newSetup, newColor);
       return 0;
    }  // domove()
-
-   this.backOneMove = function() {
-      // Called by user. Set position from history one move back.
-      var prev = this.his.pop();
-      if (!prev) { this.info("End of history"); return 0; }
-      this.color = prev.color;
-      this.setup = prev.setup;
-      this.clicks = {};
-      this.xprint();
-      updateFooter();
-      return 0;
-   }  // backOneMove()
 
    this.backToMove = function(moveId, color) {
       // Set position from history back to given moveId (number) and color.
@@ -427,14 +460,10 @@ window.Game = function() {
       }
       //console.log("backToMove: ", moveId, color );
       if (!found) return 0;   // Cannot move back
-
-      this.color = this.his[idx].color;
-      this.setup = this.his[idx].setup;
-      this.his = this.his.slice(0, idx);   // remove history from idx..end
-
-      this.clicks = {};
-      this.xprint();
-      updateFooter();
+      var newSetup = this.his[idx].setup;
+      var newColor = this.his[idx].color;
+      this.update(newSetup, newColor);     // Update new position
+      this.his = this.his.slice(0, idx);   // Remove history from idx..end
       return 0;
    }  // backToMove()
 
@@ -450,16 +479,6 @@ window.Game = function() {
       this.his.push({moveId: nextMoveId, color: iColor, setup: iSetup});
       return 0;
    }  // addHis()
-
-   this.switchTurn = function() {
-      // Switch player to move.
-      this.color = 1 - this.color;
-      this.his = [];
-      this.clicks = {};
-      this.xprint();
-      updateFooter();
-      return 0;
-   }  // switchTurn()
 
    this.parseFEN = function(iFen) {
       // Parses a string in Forsyth-Edwards Notation into a Position
@@ -564,6 +583,15 @@ window.Game = function() {
             this.drawPiece(ctx, piece);
          }
       }
+
+      // Draw setup mode indication
+      if (this.setupmode == true) {
+         ctx.fillStyle = "red";
+         ctx.globalAlpha = 0.2;   // 0.0 .. 1.0    (from transparent to opaque)
+         ctx.fillRect(0, 0, canvas.width, canvas.height);
+         ctx.globalAlpha = 1.0;
+      }
+
       ctx.restore();   // =====================================
       return 0;
    }  // xprint

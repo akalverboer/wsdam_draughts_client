@@ -10,7 +10,7 @@
 */
 
 function onOpenClick() {
-   // Called by user with button.
+   // Called by user.
    var host = document.getElementById("iHost").value.trim();
    var port = document.getElementById("iPort").value.trim();
    ws.url = "ws://" + host + ":" + port + "/";
@@ -19,7 +19,7 @@ function onOpenClick() {
 }  // onOpenClick()
     
 function onSendInput() {
-   // Called by user with button.
+   // Called by user.
    var inputElement = document.getElementById("iSendMessage");
    ws.send(inputElement.value);
    inputElement.value = "";
@@ -28,13 +28,13 @@ function onSendInput() {
 }  // onSendInput()
     
 function onCloseClick() {
-   // Called by user with button.
+   // Called by user.
    ws.close();
    return 0;
 }  // onCloseClick()
 
 function onClearClick() {
-   // Called by user with button.
+   // Called by user.
    var log = document.getElementById("divLogLeft");
    log.innerHTML = '';
    var log = document.getElementById("divLogRight");
@@ -42,8 +42,9 @@ function onClearClick() {
 }  // onClearClick()
 
 function setupFen() {
+   // Called by user
    if (game.started == true) {
-      game.info("Game already started; setup not allowed");
+      game.info("Game already started; setup fen not allowed");
       return 0;
    }
    var fen = document.getElementById("iFenString").value;
@@ -52,10 +53,46 @@ function setupFen() {
 }  // setupFen()
 
 function printFen() {
+   // Called by user
    var fen = game.toFEN();
    game.info(fen);
    return 0;
 }  // printFen()
+
+function switchTurn() {
+   // Called by user. Switch player to move.
+   if (game.started == true) {
+      game.info("Game already started; switch turn not allowed");
+      return 0;
+   }
+   var newSetup = game.setup;
+   var newColor = 1 - game.color;
+   game.init(newSetup, newColor);     // Init new position. Clear his.
+   return 0;
+}  // switchTurn()
+
+function backOneMove() {
+   // Called by user. Set position from history one move back.
+   if (game.started == true) {
+      game.info("Game already started; move back not allowed (try back request)");
+      return 0;
+   }
+   var prev = game.his.pop();
+   if (!prev) { game.info("End of history"); return 0; }
+   var newSetup = prev.setup;
+   var newColor = prev.color;
+   game.update(newSetup, newColor);   // Update new position
+   return 0;
+}  // backOneMove()
+
+function moveToString(iMove) {
+   // Convert move to string in user readable format.
+   // Parameter iMove is a "two-color" move object.
+   var d = (iMove.takes.length == 0) ? "-" : "x";
+   var moveString = iMove.steps[0] + d + iMove.steps[iMove.steps.length -1];
+   return moveString;
+}  // moveToString()
+
 
 function sendDxpChat() {
    // Called by user.
@@ -65,6 +102,7 @@ function sendDxpChat() {
    }
    var txt = document.getElementById("iChat").value;
    txt = txt.trim();
+   if (txt == "") return 0;    // empty chat
    var msg = dxp.newMsg_Chat(txt);
    dxp.info("CHAT: " + msg);
    ws.send(msg);
@@ -81,7 +119,7 @@ function sendDxpGamereq() {
       dxp.info("Game already started; gamereq not allowed");
       return 0;
    }
-
+   initMovemode();
    var myColor = parseInt(document.getElementById("selMyColor").value);  // 0 or 1
    game.myColor = myColor;     // My color to play against server
 
@@ -98,7 +136,7 @@ function sendDxpGamereq() {
    return 0;
 }  // sendDXPGamereq()
 
-function sendDxpMove(move) {
+function sendDxpMove(move, timeSpend) {
    // Send move message. Parm move is a "two-color" move object.
    // Called to inform the engine if user does a move.
    if (ws.conn == null) {
@@ -114,7 +152,6 @@ function sendDxpMove(move) {
       return 0;
    }
 
-   var timeSpend = 0;   // future
    var msg = dxp.newMsg_Move(move, timeSpend);
    dxp.info("MOVE: " + msg);
    ws.send(msg);
@@ -144,7 +181,6 @@ function sendDxpGameend() {
    ws.send(msg);
    return 0;
 }  // sendDxpGameend()
-
 
 function sendDxpBackreq() {
    // Called by user.
@@ -188,8 +224,6 @@ function sendDxpBackreq() {
    return 0;
 }  // sendDxpBackreq()
 
-
-
 function updateFooter() {
    // Called if footer text changes.
    if (game.started == true) 
@@ -212,43 +246,84 @@ function updateFooter() {
    return 0;
 }  // updateFooter()
 
-// ================================================================================================
+function initPieceIcons() {
+   // Called at start after init game. Init select box of pieces for setup.
+   if (game.setupmode == true)  initSetupmode();
+   else initMovemode();
+
+   window.pieceSelector = 'w';   // values [b, B, w, W, 0]
+   switch(window.pieceSelector) {
+     case 'b':
+       document.getElementById("div_pieceIcon_bm").className = "pieceIcons  active";
+       break;   
+     case 'B':
+       document.getElementById("div_pieceIcon_bk").className = "pieceIcons   active";
+       break;   
+     case 'w':
+       document.getElementById("div_pieceIcon_wm").className = "pieceIcons   active";
+       break;   
+     case 'W':
+       document.getElementById("div_pieceIcon_wk").className = "pieceIcons   active";
+       break;   
+   }
+   return 0;
+}  // initPieceIcons()
+
+function selectPieceIcon(iElement, iPiece) {
+   // Called by clicking piece in select box. Makes piece active for setup on mouse click.
+   // iPiece: one of [b,B,w,W,0]
+   window.pieceSelector = iPiece;
+   document.getElementById("div_pieceIcon_bm").className = 'pieceIcons';
+   document.getElementById("div_pieceIcon_bk").className = 'pieceIcons';
+   document.getElementById("div_pieceIcon_wm").className = 'pieceIcons';
+   document.getElementById("div_pieceIcon_wk").className = 'pieceIcons';
+   document.getElementById("div_pieceIcon_cl").className = 'pieceIcons';
+   iElement.className = "pieceIcons   active";   // current onclick element; css will treat it
+   return 0;
+}  // selectPieceIcon()
+
+function switchSetupmode() {
+   // Called by button
+   if (game.started == true) {
+      game.info("Game started. Toggle setup mode not allowed.");
+      return 0;
+   }
+   var newSetupmode = !game.setupmode;  // switch mode
+   if (newSetupmode == true) initSetupmode();
+   else initMovemode();
+   return 0;
+}  // switchSetupmode()
+
+function initSetupmode() {
+   // Init setupmode to setup pieces by mouse clicking.
+   game.setupmode = true;
+   game.clicks = {};
+   game.his = [];
+   game.stopwatch.stop();
+   game.xprint();
+   document.getElementById("divPieceSelection").style.display = "inline";
+   return 0;
+}  // initSetupmode()
+
+function initMovemode() {
+   // Init movemode to move pieces by mouse clicking.
+   game.setupmode = false;
+   game.clicks = {};
+   game.his = [];
+   game.stopwatch.start();
+   game.xprint();
+   document.getElementById("divPieceSelection").style.display = "none";  // hide
+   return 0;
+}  // initMovemode()
 
 function unhide(elementID) {
-  var item = document.getElementById(elementID);
-  if (item) {
-    item.className=(item.className=='isHidden')?'isVisible':'isHidden';
-  }
-}
-
-function unhideAll(elementID) {
-  var parent = document.getElementById(elementID);
-  // alert("parent " + parent + " |" + elementID + "|")
-  if (parent) {
-     var childs = parent.getElementsByTagName('*');
-     for(i=0;i<childs.length;i++) {
-       // alert("i " + i + " |" + childs[i] + "|")
-       var child = childs[i];
-       if (child.className=='isHidden') {
-         child.className='isVisible';
-       }
-     }
-  }
-}   // unhideAll
-
-
-function hideAll(elementID) {
-  var parent = document.getElementById(elementID);
-  if (parent) {
-     var childs = parent.getElementsByTagName('*');
-     for(i=0;i<childs.length;i++) {
-       var child = childs[i];
-       if (child.className=='isVisible') {
-         child.className='isHidden';
-       }
-     }
-  }
-}   // hideAll
+   // Hide/unhide element with given id.
+   var item = document.getElementById(elementID);
+   if (item) {
+      item.className=(item.className=='isHidden') ? 'isVisible' : 'isHidden';
+   }
+   return 0;
+}  // unhide()
 
 // ================================================================================================
 
